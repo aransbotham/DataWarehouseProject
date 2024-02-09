@@ -4,6 +4,10 @@ A music streaming startup, Sparkify, has grown their user base and song database
 
 As their data engineer, you are tasked with building an ETL pipeline that extracts their data from S3, stages them in Redshift, and transforms data into a set of dimensional tables for their analytics team to continue finding insights into what songs their users are listening to.
 
+<figure>
+  <img src="images/architecture.png" alt="Sparkify s3 to Redshift ETL" width=60% height=60%>
+</figure>
+
 # ETL Pipeline
 
 ## Staging
