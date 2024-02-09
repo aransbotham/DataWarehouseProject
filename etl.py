@@ -1,53 +1,26 @@
 import configparser
 import psycopg2
+from redshift_utils import execute_sql_queries
 from sql_queries import copy_table_queries, insert_table_queries
 
-
-def load_staging_tables(cur, conn):
-    """
-    Populate staging tables from S3
-
-    Args:
-        conn: (connection) instance of connection class
-        cur: (cursor) instance of cursor class
-
-    Returns:
-        none
-    """
-    for query in copy_table_queries:
-        cur.execute(query)
-        conn.commit()
-
-
-def insert_tables(cur, conn):
-    """
-    Populate fact and dimention tables from staging tables
-
-    Args:
-        conn: (connection) instance of connection class
-        cur: (cursor) instance of cursor class
-
-    Returns:
-        none
-    """
-    for query in insert_table_queries:
-        cur.execute(query)
-        conn.commit()
-
 def main():
+    # Read from Config
     config = configparser.ConfigParser()
     config.read('dwh.cfg')
 
-    # Establish the connection to database
+    # Set Database Connection
     conn = psycopg2.connect("host={} dbname={} user={} password={} port={}".format(*config['CLUSTER'].values()))
-    
-    # Create cusor object
     cur = conn.cursor()
     
-    # forming the connection
-    load_staging_tables(cur, conn)
-    insert_tables(cur, conn)
+    # Load data into Staging Tables
+    print(f'Loading data into Staging Tables: { copy_table_queries }')
+    execute_sql_queries(cur, conn, copy_table_queries)
+    
+    # Load Data into Fact and Dimension Tables 
+    print(f'Loading data into Fact and Dim Tables: { insert_table_queries }')
+    execute_sql_queries(cur, conn, insert_table_queries)
 
+    # Close Database Connection
     conn.close()
 
 
