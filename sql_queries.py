@@ -4,7 +4,7 @@ import configparser
 config = configparser.ConfigParser()
 config.read('dwh.cfg')
 
-DWH_ROLE_ARN = config.get("IAM","ROLE_ARN")
+DWH_ROLE_ARN = config.get("IAM","DWH_ROLE_ARN")
 LOG_DATA = config.get("S3","LOG_DATA")
 LOG_JSONPATH = config.get("S3", "LOG_JSONPATH")
 SONG_DATA = config.get("S3", "SONG_DATA")
