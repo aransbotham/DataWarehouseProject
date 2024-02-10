@@ -8,7 +8,9 @@ As their data engineer, you are tasked with building an ETL pipeline that extrac
   <img src="images/architecture.png" alt="Sparkify s3 to Redshift ETL" width=60% height=60%>
 </figure>
 
-<iframe width="560" height="315" src='https://dbdiagram.io/e/65c7eb94ac844320aedff1bc/65c7ee0dac844320aee000cf'> </iframe>
+<figure>
+  <img src="images/Sparkify_DB.png" alt="Sparkify Dimensional Model" width=60% height=60%>
+</figure>
 
 # ETL Pipeline
 
