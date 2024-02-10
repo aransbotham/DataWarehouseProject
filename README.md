@@ -12,15 +12,28 @@ As their data engineer, you are tasked with building an ETL pipeline that extrac
 
 # ETL Pipeline
 
-## Staging
-
 <p align="center">
   <img src="images/ETL.png" alt="Sparkify S3 to Redshift ETL" width=60% height=60%>
 </p>
 
 
-## Data Modeling
+## Tables
 
 <p align="center">
   <img src="images/Sparkify_DB.png" alt="Sparkify Dimensional Model" width=100% height=100% >
 </p>
+
+### Staging
+
+1. `staging_events`:
+2. `staging_songs`:
+
+### Dimensional Model (DIMM)
+#### Facts
+1. `songplays`:
+
+#### Dimensions
+1. `users`:
+2. `artists`:
+3. `songs`:
+4. `time`:
