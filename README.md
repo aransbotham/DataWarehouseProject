@@ -29,7 +29,7 @@ An RDS cluster is spun up and data is raw data is moved from the designated S3 b
 
 ## Scripts
 1. `scripts/create_tables.py`: Houses function to create all tables.
-2. `scriptsetl.py`: Houses function to run ETL pipeline.
+2. `scripts/etl.py`: Houses function to run ETL pipeline.
 
 
 
@@ -118,3 +118,11 @@ GROUP BY weekday, hour
 ORDER BY count(*) desc
 LIMIT 10
 ```
+
+# To Run
+
+## Python Notebook
+Open `main.ipynb` with your AWS public and secret keys handy and run top to bottom.
+
+## Python Script
+With your secret and public keys on hand, run `main.py`.
