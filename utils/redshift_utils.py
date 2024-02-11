@@ -25,7 +25,7 @@ def create_role(KEY, SECRET, REGION):
     )
 
     config = configparser.ConfigParser()
-    config.read('dwh.cfg')
+    config.read('utils/dwh.cfg')
     DWH_IAM_ROLE_NAME = config.get("IAM", "DWH_IAM_ROLE_NAME")
 
     # 1.1 Create the role
@@ -83,7 +83,7 @@ def create_cluster(KEY, SECRET, REGION):
     """
     # Access Config File
     config = configparser.ConfigParser()
-    config.read('dwh.cfg')
+    config.read('utils/dwh.cfg')
 
     DWH_CLUSTER_IDENTIFIER = config.get("DWH", "DWH_CLUSTER_IDENTIFIER")
 
@@ -157,8 +157,45 @@ def execute_sql_queries(cur, conn, q_list):
         none
     """
     for query in q_list:
+        print(f'Running: { query }')
         cur.execute(query)
         conn.commit()
+
+
+def execute_qa_count_queries(cur, table_list):
+    """
+    Execute a standard query on a list of provided tables.
+
+    Args:
+        conn:
+        cur:
+        table_list: list of table names
+    Returns:
+        Count of records in table provided.
+    """
+
+    for table in table_list:
+        cur.execute(f"SELECT COUNT(*) FROM {table}")
+        results = cur.fetchall()
+        print(f"{table} has {results} records.")
+
+
+def execute_qa_row_queries(cur, table_list):
+    """
+    Execute a standard query on a list of provided tables.
+
+    Args:
+        conn:
+        cur:
+        table_list: list of table names
+    Returns:
+        Top two rows of table provided.
+    """
+
+    for table in table_list:
+        cur.execute(f"SELECT * FROM {table} LIMIT 1")
+        results = cur.fetchall()
+        print(f"Each row in {table} has the following structure: {results}.")
 
 
 def redshift_cleanup(KEY, SECRET, REGION):
@@ -178,7 +215,7 @@ def redshift_cleanup(KEY, SECRET, REGION):
     """
 
     config = configparser.ConfigParser()
-    config.read_file(open('dwh.cfg'))
+    config.read_file(open('utils/dwh.cfg'))
 
     DWH_CLUSTER_IDENTIFIER = config.get("DWH", "DWH_CLUSTER_IDENTIFIER")
     DWH_IAM_ROLE_NAME = config.get("IAM", "DWH_IAM_ROLE_NAME")

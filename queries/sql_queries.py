@@ -2,7 +2,7 @@ import configparser
 
 # CONFIG
 config = configparser.ConfigParser()
-config.read('dwh.cfg')
+config.read('utils/dwh.cfg')
 
 DWH_ROLE_ARN = config.get("IAM", "DWH_ROLE_ARN")
 LOG_DATA = config.get("S3", "LOG_DATA")
@@ -59,6 +59,7 @@ songplay_table_create = """
 CREATE TABLE IF NOT EXISTS songplays (
     songplay_id INTEGER IDENTITY(0,1) NOT NULL PRIMARY KEY,
     start_time TIMESTAMP,
+    time_id VARCHAR,
     user_id INTEGER,
     level VARCHAR,
     song_id VARCHAR,
@@ -97,7 +98,8 @@ CREATE TABLE IF NOT EXISTS artists (
 
 time_table_create = """
 CREATE TABLE IF NOT EXISTS time (
-    start_time TIMESTAMP NOT NULL PRIMARY KEY,
+    TIME_ID VARCHAR NOT NULL PRIMARY KEY,
+    start_time TIMESTAMP NOT NULL,
     hour INTEGER,
     day INTEGER,
     week INTEGER,
@@ -133,6 +135,7 @@ staging_songs_copy = (
 songplay_table_insert = """
     INSERT INTO songplays (
         start_time, 
+        time_id,
         user_id, 
         level,
         song_id, 
@@ -143,6 +146,7 @@ songplay_table_insert = """
     ) 
     SELECT 
         timestamp 'epoch' + se.ts/1000 * interval '1 second', 
+        md5(timestamp 'epoch' + se.ts/1000 * interval '1 second'),
         se.userId, 
         se.level, 
         ss.song_id, 
@@ -211,7 +215,8 @@ artist_table_insert = """
 
 time_table_insert = """
     INSERT INTO time (
-        start_time, 
+        time_id,
+        start_time,
         hour, 
         day, 
         week, 
@@ -220,7 +225,8 @@ time_table_insert = """
         weekday
     )
     SELECT 
-        DISTINCT start_time, 
+        DISTINCT time_id,
+        start_time, 
         EXTRACT(hour from start_time), 
         EXTRACT(day from start_time), 
         EXTRACT(week from start_time), 
@@ -257,3 +263,7 @@ insert_table_queries = [
     artist_table_insert,
     time_table_insert,
 ]
+
+# TABLE LIST
+staging_tables = ['staging_events', 'staging_songs']
+dimm_tables = ['songplays', 'users', 'songs', 'artists', 'time']
