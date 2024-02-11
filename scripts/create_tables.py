@@ -4,7 +4,7 @@ from utils.redshift_utils import execute_sql_queries
 from queries.sql_queries import create_table_queries, drop_table_queries
 
 
-def main():
+def run():
     # Access Config File
     config = configparser.ConfigParser()
     config.read('utils/dwh.cfg')
@@ -30,4 +30,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    run()
